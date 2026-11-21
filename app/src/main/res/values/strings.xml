@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">NetShield AdBlocker</string>
+    <string name="update_blocklists">Update online blocklists</string>
+</resources>

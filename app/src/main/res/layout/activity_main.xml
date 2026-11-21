@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#080D19" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="12dp" android:paddingBottom="22dp">
+            <TextView android:layout_width="48dp" android:layout_height="48dp" android:gravity="center"
+                android:text="◈" android:textColor="#76E7D1" android:textSize="30sp" android:background="@drawable/bg_icon" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingStart="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NETSHIELD"
+                    android:textColor="#F4F7FF" android:textStyle="bold" android:textSize="21sp" android:letterSpacing="0.12" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRIVACY &amp; DNS PROTECTION"
+                    android:textColor="#8492AA" android:textSize="10sp" android:letterSpacing="0.12" />
+            </LinearLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v1.1"
+                android:textColor="#91A0B9" android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+            android:padding="22dp" android:background="@drawable/bg_card">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="YOUR DEVICE"
+                android:textColor="#8E9BB1" android:textSize="11sp" android:letterSpacing="0.14" />
+            <TextView android:id="@+id/tvStatus" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:text="PROTECTION PAUSED" android:textColor="#FFB26A"
+                android:textSize="18sp" android:textStyle="bold" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                android:text="Blocks known ad and tracker domains through local DNS filtering."
+                android:textColor="#A8B3C7" android:textSize="13sp" />
+            <Button android:id="@+id/btnToggleVpn" android:layout_width="match_parent" android:layout_height="54dp"
+                android:layout_marginTop="20dp" android:text="Start protection" android:textAllCaps="false"
+                android:textStyle="bold" android:textColor="#07131C" android:backgroundTint="#76E7D1" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="14dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical"
+                android:padding="18dp" android:background="@drawable/bg_card">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LIVE STATISTICS" android:textColor="#8E9BB1" android:textSize="10sp" android:letterSpacing="0.1" />
+                <TextView android:id="@+id/tvStats" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" android:text="0\nRequests blocked\n\n0\nActive domain rules" android:textColor="#F4F7FF" android:textSize="15sp" android:lineSpacingExtra="3dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
+            android:text="QUICK ACCESS" android:textColor="#A8B3C7" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12" />
+        <Button android:id="@+id/btnOpenBrowser" android:layout_width="match_parent" android:layout_height="50dp" android:layout_marginTop="10dp"
+            android:text="Open private browser" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
+        <Button android:id="@+id/btnOpenYoutube" android:layout_width="match_parent" android:layout_height="50dp" android:layout_marginTop="8dp"
+            android:text="Open YouTube in browser" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
+        <Button android:id="@+id/btnUpdateHosts" android:layout_width="match_parent" android:layout_height="50dp" android:layout_marginTop="8dp"
+            android:text="Update online blocklists" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
+            android:text="CUSTOM FILTER" android:textColor="#A8B3C7" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
+            <EditText android:id="@+id/etCustomDomain" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1"
+                android:hint="ads.example.com" android:singleLine="true" android:inputType="textUri" android:paddingStart="14dp" android:paddingEnd="14dp"
+                android:textColor="#F4F7FF" android:textColorHint="#77859B" android:background="@drawable/bg_input" />
+            <Button android:id="@+id/btnAddDomain" android:layout_width="wrap_content" android:layout_height="52dp" android:layout_marginStart="8dp"
+                android:text="Add" android:textAllCaps="false" android:textColor="#07131C" android:backgroundTint="#76E7D1" />
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
+            android:text="LOCAL CERTIFICATE AUTHORITY" android:textColor="#A8B3C7" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.08" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+            android:padding="16dp" android:layout_marginTop="8dp" android:background="@drawable/bg_card">
+            <TextView android:id="@+id/tvCertificate" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="No local CA created" android:textColor="#D5DEEF" android:textSize="13sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                android:text="The CA is for explicitly authorized local testing. Installing it does not enable HTTPS interception. Android and individual apps may not trust user CAs."
+                android:textColor="#8E9BB1" android:textSize="12sp" />
+            <Button android:id="@+id/btnCreateCa" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="10dp"
+                android:text="Create local CA" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
+            <Button android:id="@+id/btnInstallCa" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="6dp"
+                android:text="Install certificate (Android prompt)" android:textAllCaps="false" android:textColor="#07131C" android:backgroundTint="#76E7D1" />
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"
+            android:text="Privacy first · On-device rules · No traffic upload\nDNS filtering only — not a full HTTPS proxy"
+            android:textColor="#6F7D94" android:textSize="11sp" android:gravity="center" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,3 @@
+-keepattributes *Annotation*,InnerClasses,EnclosingMethod
+-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**
