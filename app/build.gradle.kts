@@ -34,6 +34,12 @@ android {
             }
         }
     }
+// Fix duplicate Bouncy Castle META-INF resources
+    packaging {
+        resources {
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+        }
+    }
 
     buildTypes {
         debug { isMinifyEnabled = false }
