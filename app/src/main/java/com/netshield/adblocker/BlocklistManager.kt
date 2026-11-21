@@ -1,6 +1,5 @@
 package com.netshield.adblocker
 
-<<<<<<< HEAD
 import android.content.Context
 import java.net.HttpURLConnection
 import java.net.URL
@@ -58,50 +57,10 @@ object BlocklistManager {
         while (index >= 0) {
             if (clean.substring(index + 1) in blockedDomains) return true
             index = clean.indexOf('.', index + 1)
-=======
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
-
-object BlocklistManager {
-    private val blockedDomains = ConcurrentHashMap.newKeySet<String>()
-    val blockedCount = AtomicInteger(0)
-
-    init {
-        val defaultDomains = listOf(
-            "doubleclick.net", "googleadservices.com", "googlesyndication.com",
-            "adservice.google.com", "pagead2.googlesyndication.com",
-            "tpc.googlesyndication.com", "admob.com", "app-measurement.com",
-            "firebase-settings.crashlytics.com", "ads.youtube.com",
-            "unityads.unity3d.com", "ads.mopub.com", "applovin.com",
-            "vungle.com", "ironsrc.com", "chartboost.com", "inmobi.com",
-            "adcolony.com", "taboola.com", "outbrain.com", "criteo.com",
-            "pubmatic.com", "rubiconproject.com", "openx.net", "casalemedia.com",
-            "popads.net", "popcash.net", "propellerads.com", "exoclick.com",
-            "juicyads.com", "trafficjunky.com", "adsterra.com", "mgid.com",
-            "revcontent.com", "zedo.com", "advertising.com", "scorecardresearch.com",
-            "quantserve.com", "hotjar.com", "mixpanel.com", "segment.io",
-            "adjust.com", "appsflyer.com", "branch.io", "kochava.com",
-            "flurry.com", "bat.bing.com", "an.facebook.com", "ads.tiktok.com"
-        )
-        blockedDomains.addAll(defaultDomains)
-    }
-
-    fun isBlocked(domain: String): Boolean {
-        val clean = domain.lowercase().trimEnd('.')
-        if (blockedDomains.contains(clean)) return true
-        var dotIndex = clean.indexOf('.')
-        while (dotIndex != -1) {
-            val parent = clean.substring(dotIndex + 1)
-            if (blockedDomains.contains(parent)) return true
-            dotIndex = clean.indexOf('.', dotIndex + 1)
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
         }
         return false
     }
 
-<<<<<<< HEAD
     fun addCustomDomain(context: Context, domain: String): Boolean {
         val clean = normalizeDomain(domain) ?: return false
         blockedDomains.add(clean)
@@ -113,16 +72,10 @@ object BlocklistManager {
         val custom = blockedDomains.filter { it !in builtIn }.toSet()
         context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .edit().putStringSet(KEY_CUSTOM, custom).apply()
-=======
-    fun addCustomDomain(domain: String) {
-        val clean = domain.lowercase().trim()
-        if (clean.isNotEmpty()) blockedDomains.add(clean)
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
     }
 
     fun getRuleCount(): Int = blockedDomains.size
 
-<<<<<<< HEAD
     fun syncRemoteHosts(context: Context, onComplete: (Int, String?) -> Unit) {
         Thread {
             var error: String? = null
@@ -150,30 +103,6 @@ object BlocklistManager {
                 error = e.message ?: "Unable to update blocklist"
             }
             onComplete(blockedDomains.size, error)
-=======
-    fun syncRemoteHosts(onComplete: (Int) -> Unit) {
-        Thread {
-            try {
-                val url = URL("https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts")
-                val conn = url.openConnection() as HttpURLConnection
-                conn.connectTimeout = 8000
-                conn.readTimeout = 8000
-                conn.inputStream.bufferedReader().useLines { lines ->
-                    lines.forEach { line ->
-                        val trimmed = line.trim()
-                        if (trimmed.startsWith("0.0.0.0 ")) {
-                            val host = trimmed.removePrefix("0.0.0.0 ").split("#")[0].trim()
-                            if (host.isNotEmpty() && host != "0.0.0.0") {
-                                blockedDomains.add(host.lowercase())
-                            }
-                        }
-                    }
-                }
-            } catch (_: Exception) {
-            } finally {
-                onComplete(blockedDomains.size)
-            }
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
         }.start()
     }
 }

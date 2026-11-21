@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<<<<<<< HEAD
-=======
-
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -11,7 +7,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-<<<<<<< HEAD
         android:allowBackup="false"
         android:label="NetShield AdBlocker"
         android:supportsRtl="true"
@@ -19,50 +14,22 @@
         android:usesCleartextTraffic="false">
 
         <activity android:name=".MainActivity" android:exported="true">
-=======
-        android:allowBackup="true"
-        android:label="NetShield AdBlocker"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Material3.Dark.NoActionBar"
-        android:usesCleartextTraffic="true">
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         <activity android:name=".AdFreeWebActivity" android:exported="false" />
-=======
-
-        <activity
-            android:name=".AdFreeWebActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false" />
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
 
         <service
             android:name=".AdBlockVpnService"
             android:exported="true"
             android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_VPN_SERVICE">
-<<<<<<< HEAD
             <intent-filter><action android:name="android.net.VpnService" /></intent-filter>
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="on-device DNS filtering VPN" />
-=======
-            <intent-filter>
-                <action android:name="android.net.VpnService" />
-            </intent-filter>
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="local_dns_ad_filtering" />
->>>>>>> 1b20695d07943a1dacf8182534f4aa60ccff61d4
         </service>
     </application>
 </manifest>
