@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ns_primary">#69D4C5</color>
+    <color name="ns_secondary">#8AB7FF</color>
+    <color name="ns_surface">#0D141B</color>
+    <color name="ns_on_surface">#EAF2F7</color>
+    <color name="ns_surface_variant">#17232D</color>
+    <color name="ns_on_surface_variant">#AABAC6</color>
+    <color name="ns_outline">#344653</color>
+</resources>

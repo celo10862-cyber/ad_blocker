@@ -7,26 +7,29 @@ plugins {
 
 val releaseKeystoreFile = rootProject.file("release-keystore.jks")
 val releasePropsFile = rootProject.file("release-signing.properties")
-val hasReleaseSigning = releaseKeystoreFile.exists() && releasePropsFile.exists()
+val hasAutoReleaseSigning = releaseKeystoreFile.exists() && releasePropsFile.exists()
+
 val releaseProps = Properties().apply {
-    if (releasePropsFile.exists()) releasePropsFile.inputStream().use { load(it) }
+    if (releasePropsFile.exists()) {
+        releasePropsFile.inputStream().use { load(it) }
+    }
 }
 
 android {
     namespace = "com.netshield.adblocker"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.netshield.adblocker"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 2
-        versionName = "1.1.0"
+        targetSdk = 34
+        versionCode = 3
+        versionName = "1.3.0"
     }
 
     signingConfigs {
-        if (hasReleaseSigning) {
-            create("localRelease") {
+        create("autoRelease") {
+            if (hasAutoReleaseSigning) {
                 storeFile = releaseKeystoreFile
                 storePassword = releaseProps.getProperty("storePassword")
                 keyAlias = releaseProps.getProperty("keyAlias")
@@ -36,11 +39,18 @@ android {
     }
 
     buildTypes {
-        debug { isMinifyEnabled = false }
+        debug {
+            isMinifyEnabled = false
+        }
         release {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("localRelease")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            if (hasAutoReleaseSigning) {
+                signingConfig = signingConfigs.getByName("autoRelease")
+            }
         }
     }
 
@@ -48,15 +58,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.activity:activity-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.webkit:webkit:1.12.1")
-    implementation("org.bouncycastle:bcprov-jdk18on:1.80")
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.80")
+    implementation("androidx.webkit:webkit:1.11.0")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
 }

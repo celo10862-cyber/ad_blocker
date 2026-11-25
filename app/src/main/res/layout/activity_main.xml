@@ -1,83 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#080D19" android:fillViewport="true">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical" android:padding="20dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:fillViewport="true">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="12dp" android:paddingBottom="22dp">
-            <TextView android:layout_width="48dp" android:layout_height="48dp" android:gravity="center"
-                android:text="◈" android:textColor="#76E7D1" android:textSize="30sp" android:background="@drawable/bg_icon" />
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingStart="12dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NETSHIELD"
-                    android:textColor="#F4F7FF" android:textStyle="bold" android:textSize="21sp" android:letterSpacing="0.12" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRIVACY &amp; DNS PROTECTION"
-                    android:textColor="#8492AA" android:textSize="10sp" android:letterSpacing="0.12" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NETSHIELD"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.18"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your digital shield"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v1.1"
-                android:textColor="#91A0B9" android:textSize="12sp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTheme"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:text="Theme"
+                android:textAllCaps="false"
+                app:icon="@android:drawable/ic_menu_manage"
+                app:iconGravity="textStart" />
         </LinearLayout>
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
-            android:padding="22dp" android:background="@drawable/bg_card">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="YOUR DEVICE"
-                android:textColor="#8E9BB1" android:textSize="11sp" android:letterSpacing="0.14" />
-            <TextView android:id="@+id/tvStatus" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" android:text="PROTECTION PAUSED" android:textColor="#FFB26A"
-                android:textSize="18sp" android:textStyle="bold" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
-                android:text="Blocks known ad and tracker domains through local DNS filtering."
-                android:textColor="#A8B3C7" android:textSize="13sp" />
-            <Button android:id="@+id/btnToggleVpn" android:layout_width="match_parent" android:layout_height="54dp"
-                android:layout_marginTop="20dp" android:text="Start protection" android:textAllCaps="false"
-                android:textStyle="bold" android:textColor="#07131C" android:backgroundTint="#76E7D1" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="14dp">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical"
-                android:padding="18dp" android:background="@drawable/bg_card">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LIVE STATISTICS" android:textColor="#8E9BB1" android:textSize="10sp" android:letterSpacing="0.1" />
-                <TextView android:id="@+id/tvStats" android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp" android:text="0\nRequests blocked\n\n0\nActive domain rules" android:textColor="#F4F7FF" android:textSize="15sp" android:lineSpacingExtra="3dp" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            app:cardBackgroundColor="?attr/colorPrimary"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#55FFFFFF"
+            app:strokeWidth="1dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_shield_glass"
+                android:orientation="vertical"
+                android:padding="22dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PROTECTION STATUS"
+                        android:textColor="#DFFFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.12" />
+                    <TextView
+                        android:id="@+id/tvStatusPill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_status_pill"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:text="● OFF"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="Your device is not protected"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvStatusDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Enable local DNS filtering to block supported ad and tracker domains."
+                    android:textColor="#E6FFFFFF"
+                    android:textSize="13sp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnToggleVpn"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Enable protection"
+                    android:textAllCaps="false"
+                    android:textColor="#FF14202B"
+                    app:backgroundTint="#FFFFFFFF"
+                    app:cornerRadius="17dp"
+                    app:icon="@android:drawable/ic_lock_lock"
+                    app:iconTint="#FF14202B" />
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="Protection mode"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Choose how aggressively NetShield filters DNS domains."
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="13sp" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="0dp"
+            app:strokeColor="?attr/colorOutlineVariant"
+            app:strokeWidth="1dp">
+            <RadioGroup
+                android:id="@+id/rgMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+                <RadioButton
+                    android:id="@+id/modeStandard"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:buttonTint="?attr/colorPrimary"
+                    android:paddingStart="8dp"
+                    android:text="Standard  ·  Ads"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/modeBalanced"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:buttonTint="?attr/colorPrimary"
+                    android:paddingStart="8dp"
+                    android:text="Balanced  ·  Ads + trackers"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/modeStrict"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:buttonTint="?attr/colorPrimary"
+                    android:paddingStart="8dp"
+                    android:text="Strict  ·  Expanded filtering"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp" />
+            </RadioGroup>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="Your protection"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="112dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center_vertical" android:padding="15dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BLOCKED REQUESTS" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="10sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvBlockedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="0" android:textColor="?attr/colorOnSurface" android:textSize="27sp" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Since app started" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="112dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center_vertical" android:padding="15dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FILTER RULES" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="10sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/tvRuleCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="0" android:textColor="?attr/colorOnSurface" android:textSize="27sp" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Loaded domains" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="11sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
-            android:text="QUICK ACCESS" android:textColor="#A8B3C7" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12" />
-        <Button android:id="@+id/btnOpenBrowser" android:layout_width="match_parent" android:layout_height="50dp" android:layout_marginTop="10dp"
-            android:text="Open private browser" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
-        <Button android:id="@+id/btnOpenYoutube" android:layout_width="match_parent" android:layout_height="50dp" android:layout_marginTop="8dp"
-            android:text="Open YouTube in browser" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
-        <Button android:id="@+id/btnUpdateHosts" android:layout_width="match_parent" android:layout_height="50dp" android:layout_marginTop="8dp"
-            android:text="Update online blocklists" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
-            android:text="CUSTOM FILTER" android:textColor="#A8B3C7" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12" />
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
-            <EditText android:id="@+id/etCustomDomain" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1"
-                android:hint="ads.example.com" android:singleLine="true" android:inputType="textUri" android:paddingStart="14dp" android:paddingEnd="14dp"
-                android:textColor="#F4F7FF" android:textColorHint="#77859B" android:background="@drawable/bg_input" />
-            <Button android:id="@+id/btnAddDomain" android:layout_width="wrap_content" android:layout_height="52dp" android:layout_marginStart="8dp"
-                android:text="Add" android:textAllCaps="false" android:textColor="#07131C" android:backgroundTint="#76E7D1" />
-        </LinearLayout>
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
-            android:text="LOCAL CERTIFICATE AUTHORITY" android:textColor="#A8B3C7" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.08" />
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
-            android:padding="16dp" android:layout_marginTop="8dp" android:background="@drawable/bg_card">
-            <TextView android:id="@+id/tvCertificate" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="No local CA created" android:textColor="#D5DEEF" android:textSize="13sp" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
-                android:text="The CA is for explicitly authorized local testing. Installing it does not enable HTTPS interception. Android and individual apps may not trust user CAs."
-                android:textColor="#8E9BB1" android:textSize="12sp" />
-            <Button android:id="@+id/btnCreateCa" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="10dp"
-                android:text="Create local CA" android:textAllCaps="false" android:textColor="#EAF2FF" android:backgroundTint="#1B2940" />
-            <Button android:id="@+id/btnInstallCa" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="6dp"
-                android:text="Install certificate (Android prompt)" android:textAllCaps="false" android:textColor="#07131C" android:backgroundTint="#76E7D1" />
-        </LinearLayout>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"
-            android:text="Privacy first · On-device rules · No traffic upload\nDNS filtering only — not a full HTTPS proxy"
-            android:textColor="#6F7D94" android:textSize="11sp" android:gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="Tools &amp; controls"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUpdateHosts"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:text="Update filter lists"
+            android:textAllCaps="false"
+            app:cornerRadius="16dp"
+            app:icon="@android:drawable/stat_notify_sync" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddDomain"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="9dp"
+            android:text="Add blocked domain"
+            android:textAllCaps="false"
+            app:cornerRadius="16dp"
+            app:icon="@android:drawable/ic_input_add" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAllowDomain"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="9dp"
+            android:text="Allow a domain"
+            android:textAllCaps="false"
+            app:cornerRadius="16dp"
+            app:icon="@android:drawable/ic_menu_add" />
+        <EditText
+            android:id="@+id/etCustomDomain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="example.com"
+            android:inputType="textUri"
+            android:padding="14dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCertificate"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="9dp"
+            android:text="Local CA certificate"
+            android:textAllCaps="false"
+            app:cornerRadius="16dp"
+            app:icon="@android:drawable/ic_lock_lock" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApps"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="9dp"
+            android:text="Choose apps"
+            android:textAllCaps="false"
+            app:cornerRadius="16dp"
+            app:icon="@android:drawable/ic_menu_manage" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetStats"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:text="Reset statistics"
+            android:textAllCaps="false" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOpenBrowser"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:text="Open protected browser"
+            android:textAllCaps="false" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="NetShield filters supported UDP DNS traffic over IPv4 and IPv6. It does not proxy all traffic or decrypt HTTPS. Apps using encrypted DNS may bypass filtering."
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp" />
     </LinearLayout>
 </ScrollView>

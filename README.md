@@ -1,44 +1,60 @@
-# NetShield AdBlocker
+# NetShield AdBlocker — Premium rebuild (v1.3.0)
 
-NetShield is an Android DNS filtering VPN with a small in-app browser and locally managed domain rules.
+NetShield is an Android local DNS filtering VPN. This build expands the existing prototype with a premium glass-inspired dashboard, theme selection, protection modes, app selection, persistent statistics, domain allow/block rules, IPv4/IPv6 UDP DNS handling, and an optional user-consented local CA certificate installer.
 
-## What this revision changes
+## Implemented
 
-- Reworked the dashboard into a dark, card-based privacy UI with clearer protection state and statistics.
-- Validates custom domains and persists custom rules locally.
-- Updates the hosts parser to accept both `0.0.0.0` and `127.0.0.1` entries, strips comments, and reports download errors.
-- Tightens the DNS-only VPN packet checks and uses a protected upstream UDP socket.
-- Hardens the embedded WebView: disables file/content access, blocks mixed content, cancels TLS certificate errors, restricts navigation to HTTP(S), and applies cosmetic filters only inside the browser.
-- Adds local CA creation using an Android Keystore-backed RSA private key and a user-approved Android certificate-install prompt.
-- Updates GitHub Actions to build debug and release APKs. Persistent release signing is supported through repository secrets.
+- **Appearance:** System, Light and Dark modes. The cards use translucent/glass-inspired styling; this is not a live backdrop blur effect on every Android version.
+- **Protection modes:** Standard blocks the bundled advertising domains; Balanced adds tracker domains; Strict adds the additional analytics domains.
+- **Per-app VPN selection:** Android's `VpnService.Builder.addAllowedApplication` is used. Select apps in the app picker. An empty selection means the VPN is not restricted by package and all apps may use its DNS route. Restart protection after changing the selection.
+- **DNS filtering:** UDP DNS queries to NetShield's configured local IPv4 and IPv6 DNS addresses are parsed and either answered with NXDOMAIN or forwarded to Cloudflare's `1.1.1.1` over a protected UDP socket.
+- **Domain rules:** Add custom blocked domains and explicit allowlist exceptions. Allowlist entries take precedence.
+- **Filter update:** Imports hosts-format domains from StevenBlack's public hosts list. Update failures are surfaced to the user.
+- **Statistics:** Blocked DNS query count persists between launches and can be reset.
+- **Local CA installer:** Generates a local RSA CA keypair in Android Keystore and presents Android's user certificate installation flow. The private key is non-exportable through this app.
+- **Build:** GitHub Actions builds debug and release APKs. Release signing is persistent when the documented repository secrets are configured.
 
-## Important scope and limitations
+## Critical network limitations — read before using
 
-This is **DNS filtering**, not a complete AdGuard replacement. The VPN currently processes IPv4 UDP DNS requests routed to its private DNS address. It does not implement general TCP/UDP forwarding, IPv6 DNS, DNS-over-TLS, DNS-over-HTTPS, QUIC inspection, or full HTTPS man-in-the-middle proxying. Some apps and browsers can bypass DNS filtering by using encrypted DNS. The embedded browser's cosmetic rules affect only that WebView and are not universal ad removal.
+This is **not AdGuard-equivalent and is not a full-device packet proxy**.
 
-The local CA feature only creates an X.509 CA certificate and offers it to Android's certificate installer. It does not intercept traffic, issue per-site certificates, or make other apps trust the CA. Android requires the user to approve installation; modern apps commonly do not trust user-installed CAs. Do not install a CA unless you understand the security implications. The private key is generated in Android Keystore and is not exported by the app. Removing the app does not necessarily remove a CA that the user installed in Android settings; remove it separately from the device's trusted credentials settings.
+- The VPN currently processes ordinary IPv4/IPv6 UDP DNS packets addressed to its configured DNS endpoints. IPv4 fragments, IPv6 extension headers/fragments, TCP, arbitrary UDP, QUIC, DNS-over-TLS and DNS-over-HTTPS are not inspected.
+- Apps using hard-coded DNS, encrypted DNS, their own DoH/DoT implementation, or private resolver stacks can bypass this DNS filter.
+- The VPN does not route arbitrary TCP/UDP traffic through a tun2socks engine. It cannot filter arbitrary URLs, page content, same-domain video ads, or encrypted HTTPS requests.
+- Per-app selection controls which apps use the VPN interface; it does not provide per-app packet inspection or per-app TLS interception.
+- Blocked statistics count DNS queries blocked by this service, not every ad, tracker, packet or request.
+- Traffic/battery savings are not estimated because the current engine does not observe all traffic.
 
-## Build
+## Local CA certificate safety
 
-Open this repository in Android Studio or run:
+The local CA action is optional and requires explicit confirmation followed by Android's own certificate installation UI. Android may show the certificate as a user-installed CA. A CA certificate alone does **not** intercept or decrypt HTTPS. This project does not include a TLS interception proxy, does not silently install a system CA, and does not bypass certificate pinning. Modern Android apps commonly do not trust user-installed CAs by default. Remove the user CA from Android Security settings if you no longer need it.
 
-```bash
-gradle --no-daemon assembleDebug assembleRelease
-```
+The CA private key is created in Android Keystore; the certificate can be installed as a public trust anchor. Treat any installed CA as sensitive and remove it when no longer required.
 
-The debug APK is at `app/build/outputs/apk/debug/app-debug.apk`. Without a signing key, the release output is unsigned.
+## Build with GitHub Actions
 
-## Stable release signing in GitHub Actions
+1. Push this project to a GitHub repository's `main` or `master` branch.
+2. Open **Actions → Build NetShield Android APK**.
+3. Download the debug APK for device testing. The release APK is unsigned unless signing secrets are configured.
 
-Create a long-lived release keystore yourself and add these GitHub Actions repository secrets:
+For persistent release signing, configure these repository secrets:
 
-- `RELEASE_KEYSTORE_BASE64`: base64-encoded JKS/PKCS12 keystore file
-- `RELEASE_KEYSTORE_PASSWORD`
-- `RELEASE_KEY_ALIAS`
-- `RELEASE_KEY_PASSWORD`
+- `ANDROID_KEYSTORE_BASE64`
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
 
-Do not generate a new release key for every build: Android will reject updates signed with a different key. Keep the keystore and passwords private and backed up securely.
+Use your own long-lived keystore. Never generate a new release key on each workflow run, and never commit the keystore or passwords.
 
-## Privacy
+## Validation and testing
 
-The app does not upload browsing history or the CA private key. Blocklist synchronization downloads a public hosts file from StevenBlack's GitHub repository. The VPN sends allowed DNS queries to Cloudflare's public resolver at `1.1.1.1`.
+The source archive is XML-parsed and structurally checked. A complete Android Gradle build and device-level VPN test were not run in this environment. Before daily use, verify:
+
+1. VPN permission prompt, foreground notification, start/stop and reboot behavior.
+2. IPv4 and IPv6 DNS resolution with protection on and off.
+3. DNS blocking, allowlist precedence and all three modes.
+4. App selection after restarting protection.
+5. Certificate installation and manual removal from Android settings.
+6. Compatibility with apps that use private/encrypted DNS.
+
+Do not interpret a successful APK build as proof that all network paths are filtered. This is a DNS-filtering implementation with clearly scoped support, not a universal ad blocker.

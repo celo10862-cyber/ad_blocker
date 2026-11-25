@@ -1,3 +1,4 @@
--keepattributes *Annotation*,InnerClasses,EnclosingMethod
--keep class org.bouncycastle.** { *; }
--dontwarn org.bouncycastle.**
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}

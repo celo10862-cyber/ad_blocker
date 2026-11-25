@@ -3,78 +3,138 @@ package com.netshield.adblocker
 import android.content.Context
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-/** Thread-safe domain rules. Rules are persisted locally; no browsing history is collected. */
-object BlocklistManager {
-    private const val PREFS = "netshield_rules"
-    private const val KEY_CUSTOM = "custom_domains"
-    private val blockedDomains = ConcurrentHashMap.newKeySet<String>()
-    val blockedCount = AtomicInteger(0)
-    @Volatile private var initialized = false
+enum class ProtectionMode { STANDARD, BALANCED, STRICT }
 
-    private val builtIn = setOf(
+object BlocklistManager {
+    private val adDomains = setOf(
         "doubleclick.net", "googleadservices.com", "googlesyndication.com",
-        "adservice.google.com", "pagead2.googlesyndication.com", "admob.com",
-        "app-measurement.com", "unityads.unity3d.com", "applovin.com", "vungle.com",
-        "ironsrc.com", "chartboost.com", "inmobi.com", "adcolony.com", "taboola.com",
-        "outbrain.com", "criteo.com", "pubmatic.com", "rubiconproject.com", "openx.net",
-        "casalemedia.com", "popads.net", "popcash.net", "propellerads.com", "exoclick.com",
-        "juicyads.com", "trafficjunky.com", "adsterra.com", "mgid.com", "revcontent.com",
-        "zedo.com", "advertising.com", "scorecardresearch.com", "quantserve.com",
-        "hotjar.com", "mixpanel.com", "segment.io", "adjust.com", "appsflyer.com",
-        "branch.io", "kochava.com", "flurry.com", "bat.bing.com", "ads.tiktok.com"
+        "adservice.google.com", "pagead2.googlesyndication.com",
+        "tpc.googlesyndication.com", "admob.com", "ads.youtube.com",
+        "unityads.unity3d.com", "ads.mopub.com", "applovin.com",
+        "vungle.com", "ironsrc.com", "chartboost.com", "inmobi.com",
+        "adcolony.com", "taboola.com", "outbrain.com", "criteo.com",
+        "pubmatic.com", "rubiconproject.com", "openx.net", "casalemedia.com",
+        "popads.net", "popcash.net", "propellerads.com", "exoclick.com",
+        "juicyads.com", "trafficjunky.com", "adsterra.com", "mgid.com",
+        "revcontent.com", "zedo.com", "advertising.com", "bat.bing.com",
+        "ads.tiktok.com"
     )
+    private val trackerDomains = setOf(
+        "app-measurement.com", "scorecardresearch.com", "quantserve.com",
+        "hotjar.com", "mixpanel.com", "segment.io", "adjust.com",
+        "appsflyer.com", "branch.io", "kochava.com", "flurry.com",
+        "an.facebook.com", "firebase-settings.crashlytics.com"
+    )
+    private val strictDomains = setOf(
+        "analytics.google.com", "analytics.twitter.com", "pixel.facebook.com",
+        "connect.facebook.net", "static.ads-twitter.com"
+    )
+    private val customBlocked = ConcurrentHashMap.newKeySet<String>()
+    private val allowlisted = ConcurrentHashMap.newKeySet<String>()
+    @Volatile var mode: ProtectionMode = ProtectionMode.BALANCED
+        private set
+    val blockedCount = AtomicInteger(0)
+    val allowedPackages = ConcurrentHashMap.newKeySet<String>()
+
 
     fun initialize(context: Context) {
-        if (initialized) return
-        synchronized(this) {
-            if (initialized) return
-            blockedDomains.addAll(builtIn)
-            val saved = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .getStringSet(KEY_CUSTOM, emptySet()).orEmpty()
-            blockedDomains.addAll(saved.mapNotNull(::normalizeDomain))
-            initialized = true
-        }
+        val prefs = context.getSharedPreferences("netshield", Context.MODE_PRIVATE)
+        mode = runCatching {
+            ProtectionMode.valueOf(prefs.getString("protection_mode", "BALANCED") ?: "BALANCED")
+        }.getOrDefault(ProtectionMode.BALANCED)
+        customBlocked.addAll(prefs.getStringSet("custom_blocked", emptySet()) ?: emptySet())
+        allowlisted.addAll(prefs.getStringSet("allowlisted", emptySet()) ?: emptySet())
+        allowedPackages.addAll(prefs.getStringSet("allowed_packages", emptySet()) ?: emptySet())
+        blockedCount.set(prefs.getInt("blocked_count", 0))
     }
 
-    private fun normalizeDomain(input: String): String? {
-        val value = input.trim().lowercase(Locale.ROOT).trimEnd('.')
-            .removePrefix("http://").removePrefix("https://").substringBefore('/')
-            .substringBefore(':')
-        if (value.length !in 1..253 || value.startsWith('.') || value.endsWith('.')) return null
-        val labels = value.split('.')
-        if (labels.any { it.isEmpty() || it.length > 63 || it.startsWith('-') || it.endsWith('-') || !it.matches(Regex("[a-z0-9-]+")) }) return null
-        return value
+    fun setAllowedPackages(context: Context, packages: Set<String>) {
+        allowedPackages.clear()
+        allowedPackages.addAll(packages)
+        context.getSharedPreferences("netshield", Context.MODE_PRIVATE).edit()
+            .putStringSet("allowed_packages", packages.toSet()).apply()
+    }
+
+    fun isPackageAllowed(packageName: String): Boolean =
+        allowedPackages.isEmpty() || allowedPackages.contains(packageName)
+
+    fun recordBlocked(context: Context) {
+        val count = blockedCount.incrementAndGet()
+        context.getSharedPreferences("netshield", Context.MODE_PRIVATE).edit()
+            .putInt("blocked_count", count).apply()
+    }
+
+    fun resetStatistics(context: Context) {
+        blockedCount.set(0)
+        context.getSharedPreferences("netshield", Context.MODE_PRIVATE).edit()
+            .putInt("blocked_count", 0).apply()
+    }
+
+    fun setMode(context: Context, newMode: ProtectionMode) {
+        mode = newMode
+        context.getSharedPreferences("netshield", Context.MODE_PRIVATE)
+            .edit().putString("protection_mode", newMode.name).apply()
     }
 
     fun isBlocked(domain: String): Boolean {
         val clean = normalizeDomain(domain) ?: return false
-        if (clean in blockedDomains) return true
-        var index = clean.indexOf('.')
+        if (matches(allowlisted, clean)) return false
+        if (matches(customBlocked, clean)) return true
+        if (matches(adDomains, clean)) return true
+        if (mode == ProtectionMode.BALANCED || mode == ProtectionMode.STRICT) {
+            if (matches(trackerDomains, clean)) return true
+        }
+        return mode == ProtectionMode.STRICT && matches(strictDomains, clean)
+    }
+
+    private fun matches(rules: Set<String>, domain: String): Boolean {
+        if (rules.contains(domain)) return true
+        var index = domain.indexOf('.')
         while (index >= 0) {
-            if (clean.substring(index + 1) in blockedDomains) return true
-            index = clean.indexOf('.', index + 1)
+            if (rules.contains(domain.substring(index + 1))) return true
+            index = domain.indexOf('.', index + 1)
         }
         return false
     }
 
+    fun normalizeDomain(value: String): String? {
+        val clean = value.trim().lowercase().trimEnd('.')
+        if (clean.length !in 1..253 || clean.contains("://") || clean.contains('/') ||
+            clean.contains(' ') || clean.startsWith(".") || clean.endsWith(".")) return null
+        val labels = clean.split('.')
+        if (labels.size < 2 || labels.any {
+                it.isEmpty() || it.length > 63 || it.startsWith("-") || it.endsWith("-") ||
+                    !it.all { c -> c.isLetterOrDigit() || c == '-' }
+            }) return null
+        return clean
+    }
+
     fun addCustomDomain(context: Context, domain: String): Boolean {
         val clean = normalizeDomain(domain) ?: return false
-        blockedDomains.add(clean)
+        allowlisted.remove(clean)
+        customBlocked.add(clean)
+        persist(context)
+        return true
+    }
+
+    fun allowDomain(context: Context, domain: String): Boolean {
+        val clean = normalizeDomain(domain) ?: return false
+        customBlocked.remove(clean)
+        allowlisted.add(clean)
         persist(context)
         return true
     }
 
     private fun persist(context: Context) {
-        val custom = blockedDomains.filter { it !in builtIn }.toSet()
-        context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .edit().putStringSet(KEY_CUSTOM, custom).apply()
+        context.getSharedPreferences("netshield", Context.MODE_PRIVATE).edit()
+            .putStringSet("custom_blocked", customBlocked.toSet())
+            .putStringSet("allowlisted", allowlisted.toSet()).apply()
     }
 
-    fun getRuleCount(): Int = blockedDomains.size
+    fun getRuleCount(): Int = adDomains.size + trackerDomains.size + strictDomains.size + customBlocked.size
 
     fun syncRemoteHosts(context: Context, onComplete: (Int, String?) -> Unit) {
         Thread {
@@ -84,25 +144,24 @@ object BlocklistManager {
                     .openConnection() as HttpURLConnection).apply {
                     connectTimeout = 12000
                     readTimeout = 20000
-                    setRequestProperty("User-Agent", "NetShield-AdBlocker/1.1")
+                    setRequestProperty("User-Agent", "NetShield-Android")
                 }
-                try {
-                    if (conn.responseCode !in 200..299) error = "List server returned HTTP ${conn.responseCode}"
-                    else conn.inputStream.bufferedReader().useLines { lines ->
-                        lines.forEach { raw ->
-                            val line = raw.substringBefore('#').trim()
-                            val parts = line.split(Regex("\\s+"))
-                            if (parts.size >= 2 && (parts[0] == "0.0.0.0" || parts[0] == "127.0.0.1")) {
-                                parts.drop(1).forEach { normalizeDomain(it)?.let(blockedDomains::add) }
-                            }
+                conn.inputStream.bufferedReader().useLines { lines ->
+                    var accepted = 0
+                lines.forEach { line ->
+                        val trimmed = line.substringBefore('#').trim()
+                        val parts = trimmed.split(Regex("\\s+"))
+                        if (parts.size >= 2 && (parts[0] == "0.0.0.0" || parts[0] == "127.0.0.1")) {
+                            normalizeDomain(parts[1])?.let { if (customBlocked.add(it)) accepted++ }
                         }
                     }
-                } finally { conn.disconnect() }
+                }
+                conn.disconnect()
                 persist(context)
             } catch (e: Exception) {
-                error = e.message ?: "Unable to update blocklist"
+                error = e.message ?: "Unable to update filter list"
             }
-            onComplete(blockedDomains.size, error)
+            onComplete(getRuleCount(), error)
         }.start()
     }
 }
